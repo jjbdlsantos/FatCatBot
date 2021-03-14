@@ -1,35 +1,7 @@
 import discord
 import os
-os.environ['MPLCONFIGDIR'] = "./matplotlib"
-import matplotlib.pyplot as plt 
-
-def genGraph():
-  # line 1 points 
-  savePath = './matplotlib/graph.png'
-  x1 = [1,2,3] 
-  y1 = [2,4,1] 
-  # plotting the line 1 points  
-  plt.plot(x1, y1, label = "line 1") 
-    
-  # line 2 points 
-  x2 = [1,2,3] 
-  y2 = [4,1,3] 
-  # plotting the line 2 points  
-  plt.plot(x2, y2, label = "line 2") 
-    
-  # naming the x axis 
-  plt.xlabel('x - axis') 
-  # naming the y axis 
-  plt.ylabel('y - axis') 
-  # giving a title to my graph 
-  plt.title('Two lines on same graph!') 
-    
-  # show a legend on the plot 
-  plt.legend() 
-    
-  # function to show the plot 
-  plt.savefig(savePath)
-  return savePath
+from StockMarket import genGraph
+from Trader import regUser, checkMoney, clearDB
 
 client = discord.Client()
 
@@ -39,11 +11,23 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
+  currentUser = str(message.author.id)
   if message.author == client.user:
     return
 
   if message.content.startswith('$$$today'):
     await message.channel.send('Howdy!')
     await message.channel.send(file=discord.File(genGraph()))
+    print(message.author)
+
+  if message.content.startswith('$$$reg'):
+    print("Current User is: " + currentUser)
+    await message.channel.send(regUser(currentUser))
+
+  if message.content.startswith('$$$bal'):
+    await message.channel.send(checkMoney(currentUser))
+
+  if(message.content.startswith('$debug')):
+    clearDB()
 
 client.run(os.getenv('TOKEN'))
