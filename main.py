@@ -1,5 +1,6 @@
 import discord
 import os
+import datetime
 from StockMarket import genGraph
 from Trader import regUser, checkMoney, clearDB
 
@@ -16,9 +17,14 @@ async def on_message(message):
     return
 
   if message.content.startswith('$$$today'):
-    await message.channel.send('Howdy!')
+    await message.channel.send('Here is what today\'s stock market looks like: ')
     await message.channel.send(file=discord.File(genGraph()))
     print(message.author)
+
+  #if message.content.startswith('$$$historic'):
+    #await message.channel.send('Here is what today\'s stock market looks like: ')
+    #await message.channel.send(file=discord.File(genGraph()))
+    #print(message.author)
 
   if message.content.startswith('$$$reg'):
     print("Current User is: " + currentUser)
