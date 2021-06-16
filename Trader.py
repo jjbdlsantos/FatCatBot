@@ -24,6 +24,26 @@ def addMoney(id, val):
   else:
     return "User does not exist."
 
+def addShares(id, shareAmt):
+  if checkUserExists(id):
+    user = db[id]
+    user["shares1"] = user["shares1"] + shareAmt
+    db[id] = user
+    return "Successfully added shares"
+  else:
+    return "User does not exist."
+
+def sellShares(id, toSell):
+  if checkUserExists(id):
+    user = db[id]
+    if toSell <= user["shares1"]:
+      user["shares1"] = user["shares1"] - toSell
+      db[id] = user
+      return "Shares sold!"
+    else:
+      return "Sorry, you don't have enough shares to sell!"
+
+
 def checkMoney(id):
   if checkUserExists(id):
     user = db[id]
@@ -33,7 +53,7 @@ def checkMoney(id):
 
 def regUser(id):
   if not checkUserExists(id):
-    db[id] = {"id": id, "money": 1000.00}
+    db[id] = {"id": id, "money": 1000.00, "shares1": 0}
     return "User created!"
   else:
     return "User already exists!"

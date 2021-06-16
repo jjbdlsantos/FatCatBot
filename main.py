@@ -1,7 +1,7 @@
 import discord
 import os
 import datetime
-from StockMarket import genGraph
+from StockMarket import genGraph, genGraphNow
 from Trader import regUser, checkMoney, clearDB
 
 client = discord.Client()
@@ -18,7 +18,8 @@ async def on_message(message):
 
   if message.content.startswith('$$$today'):
     await message.channel.send('Here is what today\'s stock market looks like: ')
-    await message.channel.send(file=discord.File(genGraph()))
+    #await message.channel.send(file=discord.File(genGraph()))
+    await message.channel.send(file=discord.File(genGraphNow()))
     print(message.author)
 
   #if message.content.startswith('$$$historic'):
@@ -32,6 +33,8 @@ async def on_message(message):
 
   if message.content.startswith('$$$bal'):
     await message.channel.send(checkMoney(currentUser))
+
+  
 
   if(message.content.startswith('$debug')):
     clearDB()

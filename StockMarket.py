@@ -12,7 +12,7 @@ saveFormat = '.png'
 
 def genDateID():
   #return datetime.now().strftime('%Y%m-%d%H-%M%S')
-  return datetime.now().strftime('%Y%m-%d%H-%M')
+  return datetime.now().strftime('%Y-%m-%d')
 
 #Returns two arrays containing the x (1st array) axis data and y (2nd array) axis data
 def createDailyTrend():
@@ -82,10 +82,26 @@ def genGraph():
   #save daily tren
 
 def genGraphNow():
+  savePath = './matplotlib/' + genDateID() + '.png'
   timeInMin = (datetime.now().hour * 60) + datetime.now().minute
-  dailyTrends = db[datetime.now().strftime('%Y-%m-%d')]
+  try:
+    dailyTrends = db[datetime.now().strftime('%Y-%m-%d')]
+  except:
+    print('Nothing found! Generating trends...')
+    x, y = createDailyTrend()
+    today = [x, y]
+    db[datetime.now().strftime('%Y-%m-%d')] = today
+    dailyTrends = db[datetime.now().strftime('%Y-%m-%d')]
+    
   xData = dailyTrends[0]
   yData = dailyTrends[1]
+
+  plt.plot(xData, yData, label='Trends as of' + datetime.now().strftime('%Y-%m-%d'))
+  plt.xlim(0, timeInMin)
+  plt.savefig(savePath)
+
+  return savePath
+
 
 def displayGraph(path):
   return 1
